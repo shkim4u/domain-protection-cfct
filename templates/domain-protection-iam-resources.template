@@ -18,10 +18,8 @@ Resources:
         Statement:
           - Effect: Allow
             Principal:
-              AWS: !Join
-                - "arn:aws:iam::"
-                - !Ref AuditAccountId
-                - ":root"
+              AWS: !Sub
+                - "arn:aws:iam::${AuditAccountId}:root"
             Action: sts:AssumeRole
       Path: /
       Policies:
