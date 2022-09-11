@@ -4,4 +4,13 @@ region: ap-northeast-2
 version: 2021-03-15
 
 # Control Tower Custom Resources (Service Control Policies or CloudFormation)
-resources: []
+resources:
+  - name: domain-protection-iam-resources
+    description: IAM resources for domain protection in each account of organization
+    resource_file: templates/domain-protection-iam-resources.template
+    deploy_method: stack_set
+    deployment_targets:
+      organizational_units:
+        - Root
+    regions:
+      - ap-northeast-2

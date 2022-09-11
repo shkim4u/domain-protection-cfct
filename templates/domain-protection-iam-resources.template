@@ -1,0 +1,53 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "IAM role for domain protection in each account of organization, assumed by Lambda function of Security Audit account."
+
+Parameters:
+  AuditAccountId:
+    Type: "String"
+#    TODO: 이 값을 실제 Audit (혹은 Security) Account 값으로 치환할 것
+    Default: 284613372749
+    MinLength: 1
+
+Resources:
+  DomainProtectionAuditRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Join
+                - "arn:aws:iam::"
+                - !Ref AuditAccountId
+                - ":root"
+            Action: sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: DomainProtectionAuditPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Sid: DomainProtection
+                Action:
+                  - cloudfront:ListDistributions
+                  - organizations:ListAccounts
+                  - route53:ListHostedZones
+                  - route53:ListResourceRecordSets
+                  - route53domains:ListDomains
+                Resource: '*'
+              - Effect: Allow
+                Sid: DomainProtectionForIPs
+                Action:
+                  - ec2:DescribeAddresses
+                  - ec2:DescribeInstances
+                  - ec2:DescribeNetworkInterfaces
+                  - ec2:DescribeRegions
+                  - ecs:DescribeTasks
+                  - ecs:ListClusters
+                  - ecs:ListTasks
+                  - globalaccelerator:ListAccelerators
+                Resource: '*'
+
