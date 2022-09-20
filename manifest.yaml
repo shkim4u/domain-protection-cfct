@@ -12,8 +12,8 @@ resources:
     deployment_targets:
       organizational_units:
         - Root
-      accounts:
-#       TODO: Modify per your Management Account.
-        - 878115720902
+#      accounts:
+##       TODO: Modify per your Management Account.
+#        - 878115720902
     regions:
       - ap-northeast-2
